@@ -23,6 +23,3 @@ class AdminSeeder extends Seeder
     }
 }
 
-$this->call([
-    AdminSeeder::class,
-]);
