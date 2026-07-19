@@ -1,9 +1,14 @@
 import PublicLayout from '@/Layouts/PublicLayout';
+import HeroSection from '@/Sections/Home/HeroSection';
 
-export default function Home() {
+export default function Home({
+    banners,
+}) {
     return (
         <PublicLayout>
-            <h1>Homepage Desa Baru Ranji</h1>
+            <HeroSection
+                banners={banners}
+            />
         </PublicLayout>
     );
 }

@@ -29,4 +29,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function createdBanners()
+    {
+        return $this->hasMany(Banner::class, 'created_by');
+    }
+
+    public function updatedBanners()
+    {
+        return $this->hasMany(Banner::class, 'updated_by');
+    }
+
+    public function deletedBanners()
+    {
+        return $this->hasMany(Banner::class, 'deleted_by');
+    }
 }
