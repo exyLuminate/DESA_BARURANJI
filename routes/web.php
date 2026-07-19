@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Public\HomeController;
+use App\Http\Controllers\Admin\VillageProfileController;
 
 
 /*
@@ -73,6 +74,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::resource('banners', BannerController::class);
         Route::patch('banners/{banner}/toggle', [BannerController::class, 'toggle'])->name('banners.toggle');
 
+        Route::get('village-profile/greeting', [VillageProfileController::class, 'editGreeting'])->name('village-profile.greeting.edit');
+        Route::put('village-profile/greeting', [VillageProfileController::class, 'updateGreeting'])->name('village-profile.greeting.update');
         /*
         |--------------------------------------------------------------------------
         | Future Modules
