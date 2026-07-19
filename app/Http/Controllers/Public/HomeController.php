@@ -10,13 +10,14 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $banners = Banner::query()
-            ->where('is_active', true)
-            ->orderBy('sort_order')
+        // Mengambil banner aktif, urut berdasarkan sort_order, lalu fallback ke yang terbaru
+        $banners = Banner::where('is_active', true)
+            ->orderBy('sort_order', 'asc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return Inertia::render('Public/Home', [
-            'banners' => $banners,
+            'banners' => $banners
         ]);
     }
 }

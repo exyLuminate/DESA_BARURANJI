@@ -1,176 +1,111 @@
-import { Head, Link, router } from '@inertiajs/react';
-import { route } from 'ziggy-js';
-import AdminLayout from '@/Layouts/AdminLayout';
+import React from 'react';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { Table, Button, Tag, Space, Popconfirm } from 'antd';
+// Asumsi Anda memiliki AuthenticatedLayout sebagai base layout admin
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'; 
 
-export default function Index({ banners = [] }) {
+export default function Index({ auth, banners }) {
+    const { patch, delete: destroy } = useForm();
 
-    const handleDelete = (banner) => {
-        if (
-            !confirm(
-                `Yakin ingin menghapus banner "${banner.title ?? 'Tanpa Judul'}"?`
-            )
-        ) {
-            return;
-        }
-
-        router.delete(
-            route('admin.banners.destroy', banner.id),
-            {
-                preserveScroll: true,
-            }
-        );
+    const handleToggle = (id) => {
+        patch(route('admin.banners.toggle', id), {
+            preserveScroll: true,
+        });
     };
 
-    const toggleBanner = (banner) => {
-        router.patch(
-            route(
-                'admin.banners.toggle',
-                banner.id
+    const handleDelete = (id) => {
+        destroy(route('admin.banners.destroy', id), {
+            preserveScroll: true,
+        });
+    };
+
+    const columns = [
+        {
+            title: 'Gambar',
+            dataIndex: 'image',
+            key: 'image',
+            render: (text) => (
+                <img 
+                    src={`/storage/${text}`} 
+                    alt="Banner" 
+                    className="w-32 h-16 object-cover rounded"
+                />
             ),
-            {},
-            {
-                preserveScroll: true,
-            }
-        );
-    };
+        },
+        {
+            title: 'Judul',
+            dataIndex: 'title',
+            key: 'title',
+            render: (text) => text || '-',
+        },
+        {
+            title: 'Urutan',
+            dataIndex: 'sort_order',
+            key: 'sort_order',
+            align: 'center',
+        },
+        {
+            title: 'Status',
+            dataIndex: 'is_active',
+            key: 'is_active',
+            render: (isActive, record) => (
+                <Tag 
+                    color={isActive ? 'green' : 'red'} 
+                    className="cursor-pointer"
+                    onClick={() => handleToggle(record.id)}
+                >
+                    {isActive ? 'Aktif' : 'Tidak Aktif'}
+                </Tag>
+            ),
+        },
+        {
+            title: 'Aksi',
+            key: 'action',
+            render: (_, record) => (
+                <Space size="middle">
+                    <Link href={route('admin.banners.edit', record.id)}>
+                        <Button type="primary" size="small">Edit</Button>
+                    </Link>
+                    <Popconfirm
+                        title="Hapus Banner"
+                        description="Apakah Anda yakin ingin menghapus banner ini?"
+                        onConfirm={() => handleDelete(record.id)}
+                        okText="Ya"
+                        cancelText="Tidak"
+                    >
+                        <Button danger size="small">Hapus</Button>
+                    </Popconfirm>
+                </Space>
+            ),
+        },
+    ];
 
     return (
-        <AdminLayout>
-            <Head title="Banner Management" />
+        <AuthenticatedLayout
+            user={auth.user}
+            header={<h2 className="font-semibold text-xl text-gray-800 leading-tight">Manajemen Banner</h2>}
+        >
+            <Head title="Manajemen Banner" />
 
-            <div className="space-y-6">
-
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-3xl font-bold">
-                            Banner Management
-                        </h1>
-
-                        <p className="text-gray-500 mt-1">
-                            Kelola banner homepage website desa.
-                        </p>
-                    </div>
-
-                    <Link
-                        href={route('admin.banners.create')}
-                        className="px-5 py-3 bg-sky-600 text-white rounded-lg hover:bg-sky-700"
-                    >
-                        Tambah Banner
-                    </Link>
-                </div>
-
-                <div className="bg-white rounded-xl shadow overflow-hidden">
-
-                    {banners.length === 0 ? (
-                        <div className="p-12 text-center text-gray-500">
-                            Belum ada banner yang dibuat.
+            <div className="py-12">
+                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-lg font-medium text-gray-900">Daftar Banner</h3>
+                            <Link href={route('admin.banners.create')}>
+                                <Button type="primary" className="bg-blue-600">Tambah Banner</Button>
+                            </Link>
                         </div>
-                    ) : (
-                        <table className="w-full">
 
-                            <thead className="bg-gray-50 border-b">
-                                <tr>
-                                    <th className="text-left px-6 py-4">
-                                        Banner
-                                    </th>
-
-                                    <th className="text-left px-6 py-4">
-                                        Sort Order
-                                    </th>
-
-                                    <th className="text-left px-6 py-4">
-                                        Status
-                                    </th>
-
-                                    <th className="text-left px-6 py-4">
-                                        Aksi
-                                    </th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-
-                                {banners.map((banner) => (
-                                    <tr
-                                        key={banner.id}
-                                        className="border-b"
-                                    >
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center gap-4">
-
-                                                <img
-                                                    src={`/storage/${banner.image}`}
-                                                    alt={banner.title}
-                                                    className="w-32 h-20 rounded-lg object-cover"
-                                                />
-
-                                                <div>
-                                                    <h3 className="font-semibold">
-                                                        {banner.title ?? 'Tanpa Judul'}
-                                                    </h3>
-
-                                                    <p className="text-sm text-gray-500 line-clamp-2">
-                                                        {banner.subtitle ?? '-'}
-                                                    </p>
-                                                </div>
-
-                                            </div>
-                                        </td>
-
-                                        <td className="px-6 py-4">
-                                            {banner.sort_order}
-                                        </td>
-
-                                        <td className="px-6 py-4">
-                                            <button
-                                                onClick={() => toggleBanner(banner)}
-                                                className={`px-3 py-1 rounded-full text-sm transition ${
-                                                    banner.is_active
-                                                        ? 'bg-green-100 text-green-700 hover:bg-green-200'
-                                                        : 'bg-red-100 text-red-700 hover:bg-red-200'
-                                                }`}
-                                            >
-                                                {banner.is_active
-                                                    ? 'Aktif'
-                                                    : 'Nonaktif'}
-                                            </button>
-                                        </td>
-
-                                        <td className="px-6 py-4">
-                                            <div className="flex gap-3">
-
-                                                <Link
-                                                    href={route(
-                                                        'admin.banners.edit',
-                                                        banner.id
-                                                    )}
-                                                    className="px-4 py-2 rounded-lg bg-yellow-500 text-white hover:bg-yellow-600"
-                                                >
-                                                    Edit
-                                                </Link>
-
-                                                <button
-                                                    onClick={() =>
-                                                        handleDelete(banner)
-                                                    }
-                                                    className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700"
-                                                >
-                                                    Hapus
-                                                </button>
-
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-
-                            </tbody>
-
-                        </table>
-                    )}
-
+                        <Table 
+                            columns={columns} 
+                            dataSource={banners.map(b => ({ ...b, key: b.id }))} 
+                            pagination={{ pageSize: 10 }}
+                            scroll={{ x: true }}
+                        />
+                    </div>
                 </div>
-
             </div>
-        </AdminLayout>
+        </AuthenticatedLayout>
     );
 }
