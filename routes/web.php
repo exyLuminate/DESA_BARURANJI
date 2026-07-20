@@ -8,6 +8,8 @@ use Inertia\Inertia;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Admin\VillageProfileController;
 use App\Http\Controllers\Admin\OfficialController; 
+use App\Models\VillageProfile;
+use App\Models\Official;
 
 
 /*
@@ -19,8 +21,11 @@ Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
 Route::get('/profil', function () {
-    return Inertia::render('Public/Profile');
-})->name('profile');
+    return Inertia::render('Public/Profile', [
+        'profile' => VillageProfile::first(),
+        'officials' => Official::where('is_active', true)->orderBy('sort_order', 'asc')->get()
+    ]);
+})->name('public.profile');
 
 Route::get('/data-desa', function () {
     return Inertia::render('Public/VillageData');

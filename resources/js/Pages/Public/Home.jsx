@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Head, Link } from '@inertiajs/react';
+import PublicLayout from '@/Layouts/PublicLayout'; // Import PublicLayout
 
 // PASTIKAN SEMUA PROPS DITERIMA DI SINI
 export default function Home({ 
@@ -25,20 +26,8 @@ export default function Home({
     }, [banners]);
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <PublicLayout>
             <Head title="Beranda" />
-
-            {/* Navbar */}
-            <nav className="bg-white shadow relative z-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                    <div className="font-bold text-xl text-green-700">
-                        {profile?.village_name || 'Desa Baru Ranji'}
-                    </div>
-                    <div className="space-x-4">
-                        <Link href={route('home')} className="text-gray-700 hover:text-green-600">Beranda</Link>
-                    </div>
-                </div>
-            </nav>
 
             {/* Hero Slider Section */}
             <section className="relative w-full h-[600px] overflow-hidden bg-gray-900">
@@ -301,19 +290,6 @@ export default function Home({
                     </div>
                 </div>
             </section>
-
-            {/* Footer */}
-            <footer className="bg-gray-950 text-gray-400 py-8 border-t border-gray-800">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
-                    <div className="mb-4 md:mb-0">
-                        <span className="font-bold text-white text-lg">{profile?.village_name || 'Desa Baru Ranji'}</span>
-                        <p className="text-sm mt-1">{profile?.address || 'Alamat belum diatur.'}</p>
-                    </div>
-                    <div className="text-sm">
-                        &copy; {new Date().getFullYear()} Pemerintah {profile?.village_name || 'Desa Baru Ranji'}. All rights reserved.
-                    </div>
-                </div>
-            </footer>
-        </div>
+        </PublicLayout>
     );
 }
