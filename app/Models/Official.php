@@ -11,6 +11,20 @@ class Official extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = [
+        'name',
+        'position',
+        'photo',
+        'is_village_head',
+        'sort_order',
+        'period_start',
+        'period_end',
+        'is_active',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+    
     protected $guarded = ['id'];
 
     protected $casts = [

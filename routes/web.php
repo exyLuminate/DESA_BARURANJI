@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Admin\VillageProfileController;
+use App\Http\Controllers\Admin\OfficialController; 
 
 
 /*
@@ -76,6 +77,19 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
         Route::get('village-profile/greeting', [VillageProfileController::class, 'editGreeting'])->name('village-profile.greeting.edit');
         Route::put('village-profile/greeting', [VillageProfileController::class, 'updateGreeting'])->name('village-profile.greeting.update');
+
+        Route::get('/village-profile', [VillageProfileController::class, 'edit'])->name('village-profile.edit');
+        Route::post('/village-profile', [VillageProfileController::class, 'update'])->name('village-profile.update');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Officials Module (Perangkat Desa)
+        |--------------------------------------------------------------------------
+        */
+
+        Route::resource('officials', OfficialController::class)->except(['show']);
+        Route::post('officials/{official}', [OfficialController::class, 'update'])->name('officials.update');
+
         /*
         |--------------------------------------------------------------------------
         | Future Modules

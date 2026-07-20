@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react';
 const menus = [
     { label: 'Dashboard', href: '/admin/dashboard' },
     { label: 'Banner', href: '/admin/banners' },
-    { label: 'Profil Desa', href: '/admin/profile' },
+    { label: 'Profil Desa', href: '/admin/village-profile' },
     { label: 'Statistik', href: '/admin/statistics' },
     { label: 'Perangkat Desa', href: '/admin/officials' },
     { label: 'Dusun', href: '/admin/hamlets' },
