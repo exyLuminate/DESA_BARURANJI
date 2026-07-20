@@ -10,6 +10,23 @@ class VillageStatistic extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'statistic_year',
+        'total_population',
+        'total_family_cards',
+        'total_male',
+        'total_female',
+        'total_hamlets',
+        'total_rt',
+        'pre_prosperous',
+        'ks_1',
+        'ks_2',
+        'ks_3',
+        'ks_3_plus',
+        'created_by',
+        'updated_by',
+    ];
+
     protected $guarded = ['id'];
 
     protected $casts = [
