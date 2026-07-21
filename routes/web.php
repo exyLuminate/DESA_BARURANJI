@@ -14,6 +14,10 @@ use App\Http\Controllers\Admin\PotentialController;
 use App\Http\Controllers\Admin\FacilityController;
 use App\Models\VillageProfile;
 use App\Models\Official;
+use App\Models\VillageStatistic;
+use App\Models\Hamlet;
+use App\Models\Potential;
+use App\Models\Facility;
 
 
 /*
@@ -32,7 +36,16 @@ Route::get('/profil', function () {
 })->name('public.profile');
 
 Route::get('/data-desa', function () {
-    return Inertia::render('Public/VillageData');
+    return Inertia::render('Public/VillageData', [
+        // Mengambil statistik tahun terbaru
+        'statistic' => VillageStatistic::orderBy('statistic_year', 'desc')->first(),
+        // Mengambil seluruh dusun
+        'hamlets' => Hamlet::orderBy('name', 'asc')->get(),
+        // Mengambil seluruh potensi desa
+        'potentials' => Potential::latest()->get(),
+        // Mengambil seluruh fasilitas desa
+        'facilities' => Facility::latest()->get(),
+    ]);
 })->name('village-data');
 
 Route::get('/berita', function () {
