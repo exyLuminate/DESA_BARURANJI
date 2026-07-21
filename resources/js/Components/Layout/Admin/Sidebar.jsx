@@ -10,7 +10,7 @@ export default function Sidebar() {
         { label: 'Profil Desa', href: route('admin.village-profile.edit'), path: '/admin/village-profile' },
         { label: 'Statistik', href: route('admin.village-statistics.index'), path: '/admin/village-statistics' },
         { label: 'Perangkat Desa', href: route('admin.officials.index'), path: '/admin/officials' },
-        { label: 'Dusun', href: '#', path: '/admin/hamlets' }, // Belum dibuat, disiapkan untuk sub-phase berikutnya
+        { label: 'Dusun', href: route('admin.hamlets.index'), path: '/admin/hamlets' },
         { label: 'Potensi', href: '#', path: '/admin/potentials' },
         { label: 'Fasilitas', href: '#', path: '/admin/facilities' },
         { label: 'Berita', href: '#', path: '/admin/news' },

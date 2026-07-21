@@ -9,6 +9,7 @@ use App\Http\Controllers\Public\HomeController;
 use App\Http\Controllers\Admin\VillageProfileController;
 use App\Http\Controllers\Admin\OfficialController;
 use App\Http\Controllers\Admin\VillageStatisticController;
+use App\Http\Controllers\Admin\HamletController;
 use App\Models\VillageProfile;
 use App\Models\Official;
 
@@ -102,7 +103,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         |--------------------------------------------------------------------------
         */
         Route::resource('village-statistics', VillageStatisticController::class)->except(['show']);
-
+        Route::resource('hamlets', HamletController::class)->except(['show']);
         /*
         |--------------------------------------------------------------------------
         | Future Modules
