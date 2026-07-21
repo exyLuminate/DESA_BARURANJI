@@ -12,6 +12,9 @@ use App\Http\Controllers\Admin\VillageStatisticController;
 use App\Http\Controllers\Admin\HamletController;
 use App\Http\Controllers\Admin\PotentialController; 
 use App\Http\Controllers\Admin\FacilityController;
+use App\Http\Controllers\Admin\NewsCategoryController;
+use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Public\NewsController as PublicNewsController; 
 use App\Models\VillageProfile;
 use App\Models\Official;
 use App\Models\VillageStatistic;
@@ -48,9 +51,8 @@ Route::get('/data-desa', function () {
     ]);
 })->name('village-data');
 
-Route::get('/berita', function () {
-    return Inertia::render('Public/News');
-})->name('news');
+Route::get('/berita', [PublicNewsController::class, 'index'])->name('news');
+Route::get('/berita/{slug}', [PublicNewsController::class, 'show'])->name('news.show');
 
 Route::get('/galeri', function () {
     return Inertia::render('Public/Gallery');
@@ -125,6 +127,15 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
         Route::resource('facilities', FacilityController::class)->except(['show']);
         Route::post('facilities/{facility}', [FacilityController::class, 'update'])->name('facilities.update');
+
+        /*
+        |--------------------------------------------------------------------------
+        | News Module (Phase 5)
+        |--------------------------------------------------------------------------
+        */
+        Route::resource('news-categories', NewsCategoryController::class)->except(['show']);
+        Route::post('news/upload-image', [NewsController::class, 'uploadImage'])->name('news.upload-image');
+        Route::resource('news', NewsController::class)->except(['show']); 
         /*
         |--------------------------------------------------------------------------
         | Future Modules

@@ -13,7 +13,14 @@ export default function Sidebar() {
         { label: 'Dusun', href: route('admin.hamlets.index'), path: '/admin/hamlets' },
         { label: 'Potensi', href: route('admin.potentials.index'), path: '/admin/potentials' },
         { label: 'Fasilitas', href: route('admin.facilities.index'), path: '/admin/facilities' },       
-        { label: 'Berita', href: '#', path: '/admin/news' },
+        // Modifikasi bagian ini: tambahkan properti aliases untuk menampung child-routes
+        // href sementara di-set ke news-categories. Nanti diubah ke admin.news.index pada Phase 5.B
+        { 
+            label: 'Berita', 
+            href: route('admin.news.index'), 
+            path: '/admin/news', 
+            aliases: ['/admin/news-categories'] 
+        },
         { label: 'Galeri', href: '#', path: '/admin/galleries' },
         { label: 'Feedback', href: '#', path: '/admin/feedbacks' },
         { label: 'Settings', href: '#', path: '/admin/settings' },
@@ -28,7 +35,9 @@ export default function Sidebar() {
 
             <div className="flex flex-col p-3 space-y-1">
                 {menus.map((menu) => {
-                    const isActive = url.startsWith(menu.path);
+                    // Update logika pengecekan active menu agar membaca aliases juga
+                    const isActive = url.startsWith(menu.path) || (menu.aliases && menu.aliases.some(alias => url.startsWith(alias)));
+                    
                     return (
                         <Link
                             key={menu.label}

@@ -6,17 +6,39 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class News extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $guarded = ['id'];
+
+    protected $fillable = [
+        'category_id',
+        'user_id',
+        'title',
+        'slug',
+        'thumbnail',
+        'content',
+        'is_published',
+        'published_at'
+    ];
 
     protected $casts = [
         'is_published' => 'boolean',
         'published_at' => 'datetime',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn(string $eventName) => "Berita telah di-{$eventName}");
+    }
 
     public function category(): BelongsTo
     {
