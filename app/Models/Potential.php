@@ -13,6 +13,15 @@ class Potential extends Model
 
     protected $guarded = ['id'];
 
+    protected $fillable = [
+        'title',
+        'description',
+        'image',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
+    
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');

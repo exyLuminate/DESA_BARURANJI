@@ -11,7 +11,7 @@ export default function Sidebar() {
         { label: 'Statistik', href: route('admin.village-statistics.index'), path: '/admin/village-statistics' },
         { label: 'Perangkat Desa', href: route('admin.officials.index'), path: '/admin/officials' },
         { label: 'Dusun', href: route('admin.hamlets.index'), path: '/admin/hamlets' },
-        { label: 'Potensi', href: '#', path: '/admin/potentials' },
+        { label: 'Potensi', href: route('admin.potentials.index'), path: '/admin/potentials' },
         { label: 'Fasilitas', href: '#', path: '/admin/facilities' },
         { label: 'Berita', href: '#', path: '/admin/news' },
         { label: 'Galeri', href: '#', path: '/admin/galleries' },
