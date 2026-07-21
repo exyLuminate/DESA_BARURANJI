@@ -1,7 +1,7 @@
 import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { Table, Button, Space, Popconfirm, notification, Card, Tag } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, FolderOpenOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Popconfirm, notification, Card, Tag, Tooltip } from 'antd';
+import { PlusOutlined, EditOutlined, DeleteOutlined, FolderOpenOutlined, EyeOutlined } from '@ant-design/icons';
 import AdminLayout from '@/Layouts/AdminLayout';
 
 export default function Index({ news }) {
