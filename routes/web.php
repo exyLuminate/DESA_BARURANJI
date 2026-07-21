@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\OfficialController;
 use App\Http\Controllers\Admin\VillageStatisticController;
 use App\Http\Controllers\Admin\HamletController;
 use App\Http\Controllers\Admin\PotentialController; 
+use App\Http\Controllers\Admin\FacilityController;
 use App\Models\VillageProfile;
 use App\Models\Official;
 
@@ -108,6 +109,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
         Route::resource('potentials', PotentialController::class)->except(['show']);
         Route::post('potentials/{potential}', [PotentialController::class, 'update'])->name('potentials.update');
+
+        Route::resource('facilities', FacilityController::class)->except(['show']);
+        Route::post('facilities/{facility}', [FacilityController::class, 'update'])->name('facilities.update');
         /*
         |--------------------------------------------------------------------------
         | Future Modules

@@ -12,7 +12,7 @@ export default function Sidebar() {
         { label: 'Perangkat Desa', href: route('admin.officials.index'), path: '/admin/officials' },
         { label: 'Dusun', href: route('admin.hamlets.index'), path: '/admin/hamlets' },
         { label: 'Potensi', href: route('admin.potentials.index'), path: '/admin/potentials' },
-        { label: 'Fasilitas', href: '#', path: '/admin/facilities' },
+        { label: 'Fasilitas', href: route('admin.facilities.index'), path: '/admin/facilities' },       
         { label: 'Berita', href: '#', path: '/admin/news' },
         { label: 'Galeri', href: '#', path: '/admin/galleries' },
         { label: 'Feedback', href: '#', path: '/admin/feedbacks' },
