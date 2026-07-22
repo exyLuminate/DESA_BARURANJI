@@ -12,7 +12,7 @@ export default function Navbar() {
         { name: 'Data Desa', href: route('village-data'), path: '/data-desa' },
         { name: 'Berita', href: route('news'), path: '/berita' },
         { name: 'Galeri', href: route('gallery'), path: '/galeri' },
-        { name: 'Kontak', href: route('contact'), path: '/kontak' },
+        { name: 'Layanan Pengaduan', href: route('complaints.public'), path: '/layanan-pengaduan' },
     ];
 
     return (

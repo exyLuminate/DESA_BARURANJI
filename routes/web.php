@@ -18,6 +18,8 @@ use App\Http\Controllers\Public\NewsController as PublicNewsController;
 use App\Http\Controllers\Admin\GalleryCategoryController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Public\GalleryController as PublicGalleryController;
+use App\Http\Controllers\Admin\ComplaintController;
+use App\Http\Controllers\Public\ComplaintController as PublicComplaintController;
 use App\Models\VillageProfile;
 use App\Models\Official;
 use App\Models\VillageStatistic;
@@ -60,9 +62,8 @@ Route::get('/berita/{slug}', [PublicNewsController::class, 'show'])->name('news.
 // INI RUTE GALERI PUBLIK YANG BENAR
 Route::get('/galeri', [PublicGalleryController::class, 'index'])->name('gallery');
 
-Route::get('/kontak', function () {
-    return Inertia::render('Public/Contact');
-})->name('contact');
+Route::get('/layanan-pengaduan', [PublicComplaintController::class, 'index'])->name('complaints.public');
+Route::post('/layanan-pengaduan', [PublicComplaintController::class, 'store'])->name('complaints.store');
 
 
 /*
@@ -146,6 +147,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         */
         Route::resource('gallery-categories', GalleryCategoryController::class)->except(['show', 'create', 'edit']);
         Route::resource('galleries', GalleryController::class);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Complaint Module (Phase 7)
+        |--------------------------------------------------------------------------
+        */
+        Route::resource('complaints', ComplaintController::class)->except(['create', 'store', 'edit']);
 
         /*
         |--------------------------------------------------------------------------

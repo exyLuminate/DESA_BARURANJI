@@ -15,7 +15,7 @@ export default function Sidebar() {
         { label: 'Fasilitas', href: route('admin.facilities.index'), path: '/admin/facilities' },       
         { label: 'Berita', href: route('admin.news.index'), path: '/admin/news',  aliases: ['/admin/news-categories']  },
         { label: 'Galeri', href: route('admin.galleries.index'), path: '/admin/galleries',  aliases: ['/admin/gallery-categories']  },
-        { label: 'Feedback', href: '#', path: '/admin/feedbacks' },
+        { label: 'Feedback', href: route('admin.complaints.index'), path: '/admin/complaints',  aliases: []  },
         { label: 'Settings', href: '#', path: '/admin/settings' },
         { label: 'Activity Log', href: '#', path: '/admin/activity-logs' },
     ];
