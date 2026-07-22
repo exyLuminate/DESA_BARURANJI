@@ -15,6 +15,9 @@ use App\Http\Controllers\Admin\FacilityController;
 use App\Http\Controllers\Admin\NewsCategoryController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Public\NewsController as PublicNewsController; 
+use App\Http\Controllers\Admin\GalleryCategoryController;
+use App\Http\Controllers\Admin\GalleryController;
+use App\Http\Controllers\Public\GalleryController as PublicGalleryController;
 use App\Models\VillageProfile;
 use App\Models\Official;
 use App\Models\VillageStatistic;
@@ -54,9 +57,8 @@ Route::get('/data-desa', function () {
 Route::get('/berita', [PublicNewsController::class, 'index'])->name('news');
 Route::get('/berita/{slug}', [PublicNewsController::class, 'show'])->name('news.show');
 
-Route::get('/galeri', function () {
-    return Inertia::render('Public/Gallery');
-})->name('gallery');
+// INI RUTE GALERI PUBLIK YANG BENAR
+Route::get('/galeri', [PublicGalleryController::class, 'index'])->name('gallery');
 
 Route::get('/kontak', function () {
     return Inertia::render('Public/Contact');
@@ -136,6 +138,15 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         Route::resource('news-categories', NewsCategoryController::class)->except(['show']);
         Route::post('news/upload-image', [NewsController::class, 'uploadImage'])->name('news.upload-image');
         Route::resource('news', NewsController::class)->except(['show']); 
+       
+        /*
+        |--------------------------------------------------------------------------
+        | Gallery Module (Phase 6)
+        |--------------------------------------------------------------------------
+        */
+        Route::resource('gallery-categories', GalleryCategoryController::class)->except(['show', 'create', 'edit']);
+        Route::resource('galleries', GalleryController::class);
+
         /*
         |--------------------------------------------------------------------------
         | Future Modules

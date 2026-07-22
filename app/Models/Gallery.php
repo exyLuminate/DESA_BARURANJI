@@ -13,6 +13,8 @@ class Gallery extends Model
 
     protected $guarded = ['id'];
 
+    protected $fillable = ['category_id', 'title', 'image'];
+    
     public function category(): BelongsTo
     {
         return $this->belongsTo(GalleryCategory::class, 'category_id');

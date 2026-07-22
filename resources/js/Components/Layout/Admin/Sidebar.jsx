@@ -13,15 +13,8 @@ export default function Sidebar() {
         { label: 'Dusun', href: route('admin.hamlets.index'), path: '/admin/hamlets' },
         { label: 'Potensi', href: route('admin.potentials.index'), path: '/admin/potentials' },
         { label: 'Fasilitas', href: route('admin.facilities.index'), path: '/admin/facilities' },       
-        // Modifikasi bagian ini: tambahkan properti aliases untuk menampung child-routes
-        // href sementara di-set ke news-categories. Nanti diubah ke admin.news.index pada Phase 5.B
-        { 
-            label: 'Berita', 
-            href: route('admin.news.index'), 
-            path: '/admin/news', 
-            aliases: ['/admin/news-categories'] 
-        },
-        { label: 'Galeri', href: '#', path: '/admin/galleries' },
+        { label: 'Berita', href: route('admin.news.index'), path: '/admin/news',  aliases: ['/admin/news-categories']  },
+        { label: 'Galeri', href: route('admin.galleries.index'), path: '/admin/galleries',  aliases: ['/admin/gallery-categories']  },
         { label: 'Feedback', href: '#', path: '/admin/feedbacks' },
         { label: 'Settings', href: '#', path: '/admin/settings' },
         { label: 'Activity Log', href: '#', path: '/admin/activity-logs' },
