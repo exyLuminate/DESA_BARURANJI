@@ -16,8 +16,8 @@ export default function Sidebar() {
         { label: 'Berita', href: route('admin.news.index'), path: '/admin/news',  aliases: ['/admin/news-categories']  },
         { label: 'Galeri', href: route('admin.galleries.index'), path: '/admin/galleries',  aliases: ['/admin/gallery-categories']  },
         { label: 'Feedback', href: route('admin.complaints.index'), path: '/admin/complaints',  aliases: []  },
-        { label: 'Settings', href: '#', path: '/admin/settings' },
-        { label: 'Activity Log', href: '#', path: '/admin/activity-logs' },
+        { label: 'Settings', href: route('admin.settings'), path: '/admin/settings' },
+        { label: 'Activity Log', href: route('admin.activity-logs.index'), path: '/admin/activity-logs' },
     ];
 
     return (

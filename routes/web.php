@@ -20,6 +20,8 @@ use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Public\GalleryController as PublicGalleryController;
 use App\Http\Controllers\Admin\ComplaintController;
 use App\Http\Controllers\Public\ComplaintController as PublicComplaintController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Models\VillageProfile;
 use App\Models\Official;
 use App\Models\VillageStatistic;
@@ -154,7 +156,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         |--------------------------------------------------------------------------
         */
         Route::resource('complaints', ComplaintController::class)->except(['create', 'store', 'edit']);
+        
 
+        Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+        Route::get('/activity-logs/{activityLog}', [ActivityLogController::class, 'show'])->name('activity-logs.show');
+        
+        Route::get('/settings', [SettingController::class, 'edit'])->name('settings');
+        Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
         /*
         |--------------------------------------------------------------------------
         | Future Modules
