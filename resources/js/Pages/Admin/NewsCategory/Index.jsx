@@ -1,7 +1,10 @@
 import React from 'react';
 import { Head, Link, router } from '@inertiajs/react';
-import { Table, Button, Space, Popconfirm, notification, Card } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Popconfirm, notification, Tag } from 'antd';
+import { 
+    PlusOutlined, EditOutlined, DeleteOutlined, 
+    FolderOpenOutlined, LinkOutlined 
+} from '@ant-design/icons';
 import AdminLayout from '@/Layouts/AdminLayout';
 
 export default function Index({ categories }) {
@@ -10,7 +13,8 @@ export default function Index({ categories }) {
             preserveScroll: true,
             onSuccess: () => notification.success({ 
                 message: 'Berhasil', 
-                description: 'Kategori berita berhasil dihapus.' 
+                description: 'Kategori berita berhasil dihapus.',
+                placement: 'bottomRight'
             }),
         });
     };
@@ -20,44 +24,66 @@ export default function Index({ categories }) {
             title: 'No',
             key: 'index',
             width: 70,
-            render: (text, record, index) => {
-                // Menghitung nomor urut berdasarkan paginasi
-                return (categories.current_page - 1) * categories.per_page + index + 1;
-            },
+            align: 'center',
+            render: (text, record, index) => (
+                <span className="font-mono text-gray-500">
+                    {(categories.current_page - 1) * categories.per_page + index + 1}
+                </span>
+            ),
         },
         {
             title: 'Nama Kategori',
             dataIndex: 'name',
             key: 'name',
+            render: (text) => (
+                <div className="font-bold text-gray-800 text-sm sm:text-base flex items-center gap-2 min-w-[150px]">
+                    <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-500 shrink-0">
+                        <FolderOpenOutlined />
+                    </div>
+                    {text}
+                </div>
+            ),
             sorter: (a, b) => a.name.localeCompare(b.name),
         },
         {
-            title: 'Slug',
+            title: 'Slug (URL)',
             dataIndex: 'slug',
             key: 'slug',
+            render: (text) => (
+                <div className="min-w-[150px]">
+                    <Tag 
+                        icon={<LinkOutlined />} 
+                        color="blue" 
+                        className="rounded-md px-2 py-1 border-blue-200 text-blue-600 bg-blue-50 shadow-sm"
+                    >
+                        {text}
+                    </Tag>
+                </div>
+            ),
         },
         {
             title: 'Aksi',
             key: 'action',
+            align: 'center',
+            fixed: 'right', // Mengunci tombol aksi agar tidak tenggelam saat di-scroll di HP
             width: 150,
             render: (_, record) => (
-                <Space size="middle">
+                <Space size="small">
                     <Link href={route('admin.news-categories.edit', record.id)}>
-                        <Button type="primary" icon={<EditOutlined />} size="small">
-                            Edit
+                        <Button type="text" className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg" icon={<EditOutlined />}>
+                            <span className="hidden sm:inline">Edit</span>
                         </Button>
                     </Link>
                     <Popconfirm 
-                        title="Hapus Kategori?" 
-                        description="Yakin ingin menghapus kategori berita ini?"
+                        title={`Hapus "${record.name}"?`}
+                        description="Kategori yang dihapus tidak dapat dikembalikan."
                         onConfirm={() => handleDelete(record.id)}
-                        okText="Ya, Hapus"
+                        okText="Hapus"
                         cancelText="Batal"
                         okButtonProps={{ danger: true }}
+                        placement="topLeft"
                     >
-                        <Button danger icon={<DeleteOutlined />} size="small">
-                            Hapus
-                        </Button>
+                        <Button type="text" danger className="hover:bg-red-50 rounded-lg" icon={<DeleteOutlined />} />
                     </Popconfirm>
                 </Space>
             ),
@@ -67,32 +93,51 @@ export default function Index({ categories }) {
     return (
         <AdminLayout>
             <Head title="Manajemen Kategori Berita" />
-            
-            <Card 
-                title={<span className="text-lg font-semibold">Daftar Kategori Berita</span>}
-                extra={
-                    <Link href={route('admin.news-categories.create')}>
-                        <Button type="primary" icon={<PlusOutlined />}>
+
+            {/* Layout Master: w-full dan overflow-hidden untuk fondasi anti-bocor */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-10 w-full overflow-hidden">
+                
+                {/* Header Soft UI */}
+                <div className="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 sm:p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl shadow-sm border border-blue-100">
+                    <div>
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-1">Kategori Berita</h1>
+                        <p className="text-gray-500 text-xs sm:text-sm">Kelola pengelompokan topik artikel dan berita desa.</p>
+                    </div>
+                    <Link href={route('admin.news-categories.create')} className="block w-full md:w-auto">
+                        <Button type="primary" size="large" icon={<PlusOutlined />} className="w-full bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md shadow-blue-200 border-0">
                             Tambah Kategori
                         </Button>
                     </Link>
-                }
-            >
-                <Table 
-                    columns={columns} 
-                    dataSource={categories.data} 
-                    rowKey="id"
-                    pagination={{
-                        total: categories.total,
-                        current: categories.current_page,
-                        pageSize: categories.per_page,
-                        showTotal: (total, range) => `${range[0]}-${range[1]} dari ${total} item`,
-                        onChange: (page) => {
-                            router.get(route('admin.news-categories.index', { page }), {}, { preserveState: true });
-                        }
-                    }}
-                />
-            </Card>
+                </div>
+
+                {/* Table Section (Responsive & Paginated) */}
+                <div className="grid grid-cols-1 w-full">
+                    <div className="bg-white rounded-2xl sm:rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 w-full overflow-hidden">
+                        <Table 
+                            columns={columns} 
+                            dataSource={categories.data} 
+                            rowKey="id"
+                            scroll={{ x: 'max-content' }} // Anti-bocor horizontal di HP
+                            className="custom-soft-table w-full"
+                            pagination={{
+                                total: categories.total,
+                                current: categories.current_page,
+                                pageSize: categories.per_page,
+                                showTotal: (total, range) => (
+                                    <span className="text-gray-500 font-medium">
+                                        Menampilkan {range[0]}-{range[1]} dari {total} data
+                                    </span>
+                                ),
+                                className: "mt-4 mb-4 mr-6",
+                                onChange: (page) => {
+                                    router.get(route('admin.news-categories.index', { page }), {}, { preserveState: true });
+                                }
+                            }}
+                        />
+                    </div>
+                </div>
+                
+            </div>
         </AdminLayout>
     );
 }
