@@ -6,6 +6,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Public\HomeController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\VillageProfileController;
 use App\Http\Controllers\Admin\OfficialController;
 use App\Http\Controllers\Admin\VillageStatisticController;
@@ -92,9 +93,7 @@ Route::middleware('auth')->group(function () {
 */
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
 
-        Route::get('/dashboard', function () {
-            return Inertia::render('Admin/Dashboard');
-        })->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         /*
         |--------------------------------------------------------------------------
