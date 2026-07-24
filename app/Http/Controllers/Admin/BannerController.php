@@ -12,12 +12,34 @@ use Inertia\Inertia;
 
 class BannerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $banners = Banner::orderBy('sort_order', 'asc')->orderBy('created_at', 'desc')->get();
+        $query = Banner::query();
+
+        // Fitur Pencarian (Judul / Sub Judul)
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('subtitle', 'like', "%{$search}%");
+            });
+        }
+
+        // Fitur Filter Status Aktif/Tidak Aktif
+        if ($request->filled('status')) {
+            $status = $request->input('status') === 'active' ? true : false;
+            $query->where('is_active', $status);
+        }
+
+        // Pengurutan dan Paginasi
+        $banners = $query->orderBy('sort_order', 'asc')
+                         ->orderBy('created_at', 'desc')
+                         ->paginate(10)
+                         ->withQueryString();
         
         return Inertia::render('Admin/Banner/Index', [
-            'banners' => $banners
+            'banners' => $banners,
+            'filters' => $request->only(['search', 'status'])
         ]);
     }
 
