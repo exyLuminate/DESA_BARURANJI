@@ -1,6 +1,12 @@
 import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
-import AdminLayout from '@/Layouts/AdminLayout';
+import { InputNumber, Button, Alert } from 'antd';
+import { 
+    SaveOutlined, ArrowLeftOutlined, CalendarOutlined, 
+    TeamOutlined, EnvironmentOutlined, HeartOutlined, 
+    ManOutlined, WomanOutlined, HomeOutlined 
+} from '@ant-design/icons';
+import AdminLayout from '@/Layouts/AdminLayout'; // Sesuaikan path layout Anda
 
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
@@ -18,6 +24,13 @@ export default function Create() {
         ks_3_plus: 0,
     });
 
+    // Real-time Auto-Calculation Validation
+    const totalGender = (data.total_male || 0) + (data.total_female || 0);
+    const isPopulationMatch = totalGender === (data.total_population || 0);
+    
+    const totalKs = (data.pre_prosperous || 0) + (data.ks_1 || 0) + (data.ks_2 || 0) + (data.ks_3 || 0) + (data.ks_3_plus || 0);
+    const isKsMatch = totalKs === (data.total_family_cards || 0);
+
     const submit = (e) => {
         e.preventDefault();
         post(route('admin.village-statistics.store'));
@@ -26,113 +39,168 @@ export default function Create() {
     return (
         <AdminLayout>
             <Head title="Tambah Statistik Desa" />
-            <div className="py-6 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 sm:gap-0">
-                    <h1 className="text-2xl font-semibold text-gray-800">Tambah Statistik Desa</h1>
-                    <Link href={route('admin.village-statistics.index')} className="text-gray-600 hover:text-gray-900 border sm:border-none px-3 py-1 sm:p-0 rounded-md sm:rounded-none text-sm sm:text-base">
-                        &larr; Kembali
-                    </Link>
+            
+            <div className="max-w-7xl mx-auto pb-10">
+                {/* Header Soft UI */}
+                <div className="mb-6 flex items-center justify-between">
+                    <div>
+                        <Link 
+                            href={route('admin.village-statistics.index')}
+                            className="inline-flex items-center text-gray-500 hover:text-blue-600 font-medium transition-colors mb-2"
+                        >
+                            <ArrowLeftOutlined className="mr-2" /> Kembali ke Daftar Statistik
+                        </Link>
+                        <h1 className="text-2xl font-bold text-gray-800">Tambah Statistik Desa</h1>
+                    </div>
                 </div>
 
-                <div className="bg-white shadow rounded-lg p-6">
-                    <form onSubmit={submit} className="space-y-8">
-                        {/* Section: Tahun & Umum */}
-                        <div>
-                            <h2 className="text-lg font-medium text-gray-900 border-b pb-2 mb-4">Tahun Data</h2>
-                            <div className="max-w-xs">
-                                <label className="block text-sm font-medium text-gray-700">Tahun Statistik</label>
-                                <input type="number" min="1900" max="2100" value={data.statistic_year} onChange={e => setData('statistic_year', e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm font-bold" required />
-                                {errors.statistic_year && <p className="text-red-500 text-xs mt-1">{errors.statistic_year}</p>}
-                            </div>
+                <form onSubmit={submit} className="space-y-6">
+                    
+                    {/* SECTION 1: TAHUN DATA (Atas, Lebar Penuh) */}
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl shadow-sm border border-blue-100 p-6 flex flex-col md:flex-row items-center gap-6">
+                        <div className="flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-sm text-blue-600 text-2xl shrink-0">
+                            <CalendarOutlined />
                         </div>
+                        <div className="flex-1 text-center md:text-left">
+                            <h2 className="text-lg font-bold text-gray-800 mb-1">Tahun Pendataan</h2>
+                            <p className="text-sm text-gray-500">Pilih tahun statistik. Satu tahun hanya boleh memiliki satu data statistik resmi.</p>
+                        </div>
+                        <div className="w-full md:w-auto">
+                            <InputNumber 
+                                min={2000} 
+                                max={2100} 
+                                size="large"
+                                value={data.statistic_year} 
+                                onChange={val => setData('statistic_year', val)} 
+                                className={`w-full md:w-48 rounded-xl text-center text-lg font-bold ${errors.statistic_year ? 'border-red-500' : ''}`} 
+                                status={errors.statistic_year ? 'error' : ''}
+                            />
+                            {errors.statistic_year && <p className="text-red-500 text-xs mt-1 text-center">{errors.statistic_year}</p>}
+                        </div>
+                    </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            {/* Kiri: Demografi */}
-                            <div className="space-y-4">
-                                <h2 className="text-lg font-medium text-gray-900 border-b pb-2">Demografi & Penduduk</h2>
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        
+                        {/* KIRI: DEMOGRAFI */}
+                        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8 space-y-6">
+                            <h2 className="text-lg font-bold text-gray-800 flex items-center border-b pb-4">
+                                <span className="bg-blue-100 text-blue-600 w-8 h-8 flex items-center justify-center rounded-xl mr-3 text-sm"><TeamOutlined /></span> 
+                                Demografi & Penduduk
+                            </h2>
+
+                            <div className="space-y-5">
+                                <div>
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Total Penduduk (Jiwa)</label>
+                                    <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_population} onChange={val => setData('total_population', val)} status={errors.total_population ? 'error' : ''} />
+                                    {errors.total_population && <p className="text-red-500 text-xs mt-1">{errors.total_population}</p>}
+                                </div>
                                 
+                                <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 grid grid-cols-2 gap-4 relative">
+                                    <div>
+                                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2"><ManOutlined className="text-blue-500 mr-1"/> Laki-laki</label>
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_male} onChange={val => setData('total_male', val)} status={errors.total_male ? 'error' : ''} />
+                                    </div>
+                                    <div>
+                                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2"><WomanOutlined className="text-pink-500 mr-1"/> Perempuan</label>
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_female} onChange={val => setData('total_female', val)} status={errors.total_female ? 'error' : ''} />
+                                    </div>
+                                    
+                                    {/* Smart Validation Indicator */}
+                                    <div className="col-span-2 mt-1">
+                                        {data.total_population > 0 && !isPopulationMatch && (
+                                            <Alert message={`Total Gender (${totalGender}) tidak sama dengan Total Penduduk (${data.total_population}).`} type="warning" showIcon className="rounded-xl py-1 text-xs" />
+                                        )}
+                                        {data.total_population > 0 && isPopulationMatch && (
+                                            <Alert message="Jumlah sesuai" type="success" showIcon className="rounded-xl py-1 text-xs" />
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* KANAN: KESEJAHTERAAN & WILAYAH */}
+                        <div className="space-y-6">
+                            
+                            {/* Kesejahteraan */}
+                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8">
+                                <h2 className="text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-5">
+                                    <span className="bg-green-100 text-green-600 w-8 h-8 flex items-center justify-center rounded-xl mr-3 text-sm"><HeartOutlined /></span> 
+                                    Kesejahteraan Keluarga
+                                </h2>
+
+                                <div className="mb-5">
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Total Kepala Keluarga (KK)</label>
+                                    <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_family_cards} onChange={val => setData('total_family_cards', val)} status={errors.total_family_cards ? 'error' : ''} />
+                                    {errors.total_family_cards && <p className="text-red-500 text-xs mt-1">{errors.total_family_cards}</p>}
+                                </div>
+
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-600 mb-1">Pra Sejahtera</label>
+                                        <InputNumber min={0} className="w-full rounded-lg" value={data.pre_prosperous} onChange={val => setData('pre_prosperous', val)} />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-600 mb-1">KS 1</label>
+                                        <InputNumber min={0} className="w-full rounded-lg" value={data.ks_1} onChange={val => setData('ks_1', val)} />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-600 mb-1">KS 2</label>
+                                        <InputNumber min={0} className="w-full rounded-lg" value={data.ks_2} onChange={val => setData('ks_2', val)} />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-600 mb-1">KS 3</label>
+                                        <InputNumber min={0} className="w-full rounded-lg" value={data.ks_3} onChange={val => setData('ks_3', val)} />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-semibold text-gray-600 mb-1">KS 3+</label>
+                                        <InputNumber min={0} className="w-full rounded-lg" value={data.ks_3_plus} onChange={val => setData('ks_3_plus', val)} />
+                                    </div>
+                                </div>
+                                
+                                {/* Smart Validation Indicator */}
+                                <div className="mt-3">
+                                    {data.total_family_cards > 0 && !isKsMatch && (
+                                        <Alert message={`Rincian Kesejahteraan (${totalKs} KK) tidak cocok dengan Total KK (${data.total_family_cards}).`} type="warning" showIcon className="rounded-xl py-1 text-xs" />
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Wilayah */}
+                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8">
+                                <h2 className="text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-5">
+                                    <span className="bg-purple-100 text-purple-600 w-8 h-8 flex items-center justify-center rounded-xl mr-3 text-sm"><EnvironmentOutlined /></span> 
+                                    Cakupan Wilayah
+                                </h2>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div className="col-span-2">
-                                        <label className="block text-sm font-medium text-gray-700">Total Penduduk</label>
-                                        <input type="number" min="0" value={data.total_population} onChange={e => setData('total_population', e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm" required />
-                                        {errors.total_population && <p className="text-red-500 text-xs mt-1">{errors.total_population}</p>}
-                                    </div>
-                                    <div className="col-span-2">
-                                        <label className="block text-sm font-medium text-gray-700">Total Kepala Keluarga (KK)</label>
-                                        <input type="number" min="0" value={data.total_family_cards} onChange={e => setData('total_family_cards', e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm" required />
-                                        {errors.total_family_cards && <p className="text-red-500 text-xs mt-1">{errors.total_family_cards}</p>}
+                                    <div>
+                                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2"><HomeOutlined className="mr-1 text-gray-400"/> Total Dusun</label>
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_hamlets} onChange={val => setData('total_hamlets', val)} status={errors.total_hamlets ? 'error' : ''} />
                                     </div>
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700">Laki-laki</label>
-                                        <input type="number" min="0" value={data.total_male} onChange={e => setData('total_male', e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm" required />
-                                        {errors.total_male && <p className="text-red-500 text-xs mt-1">{errors.total_male}</p>}
-                                    </div>
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700">Perempuan</label>
-                                        <input type="number" min="0" value={data.total_female} onChange={e => setData('total_female', e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm" required />
-                                        {errors.total_female && <p className="text-red-500 text-xs mt-1">{errors.total_female}</p>}
+                                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2"><HomeOutlined className="mr-1 text-gray-400"/> Total RT</label>
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_rt} onChange={val => setData('total_rt', val)} status={errors.total_rt ? 'error' : ''} />
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Kanan: Administratif & Kesejahteraan */}
-                            <div className="space-y-8">
-                                <div className="space-y-4">
-                                    <h2 className="text-lg font-medium text-gray-900 border-b pb-2">Wilayah Administratif</h2>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Total Dusun</label>
-                                            <input type="number" min="0" value={data.total_hamlets} onChange={e => setData('total_hamlets', e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm" required />
-                                            {errors.total_hamlets && <p className="text-red-500 text-xs mt-1">{errors.total_hamlets}</p>}
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Total RT</label>
-                                            <input type="number" min="0" value={data.total_rt} onChange={e => setData('total_rt', e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm" required />
-                                            {errors.total_rt && <p className="text-red-500 text-xs mt-1">{errors.total_rt}</p>}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-4">
-                                    <h2 className="text-lg font-medium text-gray-900 border-b pb-2">Tingkat Kesejahteraan (KK)</h2>
-                                    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">Pra Sejahtera</label>
-                                            <input type="number" min="0" value={data.pre_prosperous} onChange={e => setData('pre_prosperous', e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm" required />
-                                            {errors.pre_prosperous && <p className="text-red-500 text-xs mt-1">{errors.pre_prosperous}</p>}
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">KS 1</label>
-                                            <input type="number" min="0" value={data.ks_1} onChange={e => setData('ks_1', e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm" required />
-                                            {errors.ks_1 && <p className="text-red-500 text-xs mt-1">{errors.ks_1}</p>}
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">KS 2</label>
-                                            <input type="number" min="0" value={data.ks_2} onChange={e => setData('ks_2', e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm" required />
-                                            {errors.ks_2 && <p className="text-red-500 text-xs mt-1">{errors.ks_2}</p>}
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">KS 3</label>
-                                            <input type="number" min="0" value={data.ks_3} onChange={e => setData('ks_3', e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm" required />
-                                            {errors.ks_3 && <p className="text-red-500 text-xs mt-1">{errors.ks_3}</p>}
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium text-gray-700">KS 3+</label>
-                                            <input type="number" min="0" value={data.ks_3_plus} onChange={e => setData('ks_3_plus', e.target.value)} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring-gray-500 sm:text-sm" required />
-                                            {errors.ks_3_plus && <p className="text-red-500 text-xs mt-1">{errors.ks_3_plus}</p>}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
+                    </div>
 
-                        <div className="flex justify-end pt-6 border-t mt-8">
-                            <button type="submit" disabled={processing} className="w-full sm:w-auto bg-gray-800 text-white px-8 py-2 rounded-md hover:bg-gray-700 disabled:opacity-50 transition-colors">
-                                {processing ? 'Menyimpan...' : 'Simpan Data'}
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    {/* Floating Action Bar */}
+                    <div className="flex justify-end mt-8">
+                        <Button 
+                            type="primary" 
+                            htmlType="submit" 
+                            size="large"
+                            loading={processing}
+                            icon={<SaveOutlined />}
+                            className="bg-blue-600 hover:bg-blue-700 rounded-xl px-8 shadow-md shadow-blue-200"
+                        >
+                            Simpan Data Statistik
+                        </Button>
+                    </div>
+
+                </form>
             </div>
         </AdminLayout>
     );
