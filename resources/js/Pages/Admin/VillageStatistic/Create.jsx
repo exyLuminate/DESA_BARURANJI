@@ -6,7 +6,7 @@ import {
     TeamOutlined, EnvironmentOutlined, HeartOutlined, 
     ManOutlined, WomanOutlined, HomeOutlined 
 } from '@ant-design/icons';
-import AdminLayout from '@/Layouts/AdminLayout'; // Sesuaikan path layout Anda
+import AdminLayout from '@/Layouts/AdminLayout'; 
 
 export default function Create() {
     const { data, setData, post, processing, errors } = useForm({
@@ -40,30 +40,32 @@ export default function Create() {
         <AdminLayout>
             <Head title="Tambah Statistik Desa" />
             
-            <div className="max-w-7xl mx-auto pb-10">
+            {/* Tambahan padding responsif px-4 sm:px-6 */}
+            <div className="max-w-7xl mx-auto pb-10 px-4 sm:px-6 lg:px-8 pt-4 sm:pt-0">
+                
                 {/* Header Soft UI */}
                 <div className="mb-6 flex items-center justify-between">
                     <div>
                         <Link 
                             href={route('admin.village-statistics.index')}
-                            className="inline-flex items-center text-gray-500 hover:text-blue-600 font-medium transition-colors mb-2"
+                            className="inline-flex items-center text-gray-500 hover:text-blue-600 font-medium transition-colors mb-2 text-sm sm:text-base"
                         >
-                            <ArrowLeftOutlined className="mr-2" /> Kembali ke Daftar Statistik
+                            <ArrowLeftOutlined className="mr-2" /> Kembali ke Daftar
                         </Link>
-                        <h1 className="text-2xl font-bold text-gray-800">Tambah Statistik Desa</h1>
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Tambah Statistik Desa</h1>
                     </div>
                 </div>
 
                 <form onSubmit={submit} className="space-y-6">
                     
                     {/* SECTION 1: TAHUN DATA (Atas, Lebar Penuh) */}
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl shadow-sm border border-blue-100 p-6 flex flex-col md:flex-row items-center gap-6">
-                        <div className="flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-sm text-blue-600 text-2xl shrink-0">
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-3xl shadow-sm border border-blue-100 p-5 sm:p-6 flex flex-col md:flex-row items-center gap-4 sm:gap-6">
+                        <div className="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-white rounded-2xl shadow-sm text-blue-600 text-xl sm:text-2xl shrink-0">
                             <CalendarOutlined />
                         </div>
                         <div className="flex-1 text-center md:text-left">
-                            <h2 className="text-lg font-bold text-gray-800 mb-1">Tahun Pendataan</h2>
-                            <p className="text-sm text-gray-500">Pilih tahun statistik. Satu tahun hanya boleh memiliki satu data statistik resmi.</p>
+                            <h2 className="text-base sm:text-lg font-bold text-gray-800 mb-1">Tahun Pendataan</h2>
+                            <p className="text-xs sm:text-sm text-gray-500">Pilih tahun statistik. Satu tahun hanya boleh memiliki satu data statistik resmi.</p>
                         </div>
                         <div className="w-full md:w-auto">
                             <InputNumber 
@@ -82,8 +84,8 @@ export default function Create() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         
                         {/* KIRI: DEMOGRAFI */}
-                        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8 space-y-6">
-                            <h2 className="text-lg font-bold text-gray-800 flex items-center border-b pb-4">
+                        <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-5 sm:p-8 space-y-6">
+                            <h2 className="text-base sm:text-lg font-bold text-gray-800 flex items-center border-b pb-4">
                                 <span className="bg-blue-100 text-blue-600 w-8 h-8 flex items-center justify-center rounded-xl mr-3 text-sm"><TeamOutlined /></span> 
                                 Demografi & Penduduk
                             </h2>
@@ -97,11 +99,11 @@ export default function Create() {
                                 
                                 <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 grid grid-cols-2 gap-4 relative">
                                     <div>
-                                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2"><ManOutlined className="text-blue-500 mr-1"/> Laki-laki</label>
+                                        <label className="flex items-center text-xs sm:text-sm font-semibold text-gray-700 mb-2 line-clamp-1"><ManOutlined className="text-blue-500 mr-1"/> Laki-laki</label>
                                         <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_male} onChange={val => setData('total_male', val)} status={errors.total_male ? 'error' : ''} />
                                     </div>
                                     <div>
-                                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2"><WomanOutlined className="text-pink-500 mr-1"/> Perempuan</label>
+                                        <label className="flex items-center text-xs sm:text-sm font-semibold text-gray-700 mb-2 line-clamp-1"><WomanOutlined className="text-pink-500 mr-1"/> Perempuan</label>
                                         <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_female} onChange={val => setData('total_female', val)} status={errors.total_female ? 'error' : ''} />
                                     </div>
                                     
@@ -122,8 +124,8 @@ export default function Create() {
                         <div className="space-y-6">
                             
                             {/* Kesejahteraan */}
-                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8">
-                                <h2 className="text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-5">
+                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-5 sm:p-8">
+                                <h2 className="text-base sm:text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-5">
                                     <span className="bg-green-100 text-green-600 w-8 h-8 flex items-center justify-center rounded-xl mr-3 text-sm"><HeartOutlined /></span> 
                                     Kesejahteraan Keluarga
                                 </h2>
@@ -166,18 +168,18 @@ export default function Create() {
                             </div>
 
                             {/* Wilayah */}
-                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8">
-                                <h2 className="text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-5">
+                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-5 sm:p-8">
+                                <h2 className="text-base sm:text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-5">
                                     <span className="bg-purple-100 text-purple-600 w-8 h-8 flex items-center justify-center rounded-xl mr-3 text-sm"><EnvironmentOutlined /></span> 
                                     Cakupan Wilayah
                                 </h2>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2"><HomeOutlined className="mr-1 text-gray-400"/> Total Dusun</label>
+                                        <label className="flex items-center text-xs sm:text-sm font-semibold text-gray-700 mb-2"><HomeOutlined className="mr-1 text-gray-400"/> Total Dusun</label>
                                         <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_hamlets} onChange={val => setData('total_hamlets', val)} status={errors.total_hamlets ? 'error' : ''} />
                                     </div>
                                     <div>
-                                        <label className="flex items-center text-sm font-semibold text-gray-700 mb-2"><HomeOutlined className="mr-1 text-gray-400"/> Total RT</label>
+                                        <label className="flex items-center text-xs sm:text-sm font-semibold text-gray-700 mb-2"><HomeOutlined className="mr-1 text-gray-400"/> Total RT</label>
                                         <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_rt} onChange={val => setData('total_rt', val)} status={errors.total_rt ? 'error' : ''} />
                                     </div>
                                 </div>
@@ -186,7 +188,7 @@ export default function Create() {
                         </div>
                     </div>
 
-                    {/* Floating Action Bar */}
+                    {/* Floating Action Bar - w-full on mobile */}
                     <div className="flex justify-end mt-8">
                         <Button 
                             type="primary" 
@@ -194,7 +196,7 @@ export default function Create() {
                             size="large"
                             loading={processing}
                             icon={<SaveOutlined />}
-                            className="bg-blue-600 hover:bg-blue-700 rounded-xl px-8 shadow-md shadow-blue-200"
+                            className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 rounded-xl px-8 shadow-md shadow-blue-200"
                         >
                             Simpan Data Statistik
                         </Button>

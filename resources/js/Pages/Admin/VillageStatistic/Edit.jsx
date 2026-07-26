@@ -24,9 +24,9 @@ export default function Edit({ statistic }) {
         ks_3_plus: statistic.ks_3_plus || 0,
     });
 
-    // Cek apakah yang diedit adalah data historis (tahun lalu)
+    // Cek apakah yang diedit adalah data historis (tahun lalu) dengan aman
     const currentYear = new Date().getFullYear();
-    const isHistoricalData = parseInt(data.statistic_year) < currentYear;
+    const isHistoricalData = data.statistic_year && parseInt(data.statistic_year) < currentYear;
 
     // Real-time Auto-Calculation Validation
     const totalGender = (data.total_male || 0) + (data.total_female || 0);
@@ -46,7 +46,7 @@ export default function Edit({ statistic }) {
 
     return (
         <AdminLayout>
-            <Head title={`Edit Statistik ${data.statistic_year}`} />
+            <Head title={`Edit Statistik ${data.statistic_year || ''}`} />
             
             <div className="max-w-7xl mx-auto pb-10">
                 {/* Header Soft UI */}
@@ -89,7 +89,7 @@ export default function Edit({ statistic }) {
                                 max={2100} 
                                 size="large"
                                 value={data.statistic_year} 
-                                onChange={val => setData('statistic_year', val)} 
+                                onChange={val => setData('statistic_year', val || '')} 
                                 className={`w-full md:w-48 rounded-xl text-center text-lg font-bold ${errors.statistic_year ? 'border-red-500' : ''}`} 
                                 status={errors.statistic_year ? 'error' : ''}
                             />
@@ -109,18 +109,18 @@ export default function Edit({ statistic }) {
                             <div className="space-y-5">
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-2">Total Penduduk (Jiwa)</label>
-                                    <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_population} onChange={val => setData('total_population', val)} status={errors.total_population ? 'error' : ''} />
+                                    <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_population} onChange={val => setData('total_population', val || 0)} status={errors.total_population ? 'error' : ''} />
                                     {errors.total_population && <p className="text-red-500 text-xs mt-1">{errors.total_population}</p>}
                                 </div>
                                 
                                 <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100 grid grid-cols-2 gap-4 relative">
                                     <div>
                                         <label className="flex items-center text-sm font-semibold text-gray-700 mb-2"><ManOutlined className="text-blue-500 mr-1"/> Laki-laki</label>
-                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_male} onChange={val => setData('total_male', val)} status={errors.total_male ? 'error' : ''} />
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_male} onChange={val => setData('total_male', val || 0)} status={errors.total_male ? 'error' : ''} />
                                     </div>
                                     <div>
                                         <label className="flex items-center text-sm font-semibold text-gray-700 mb-2"><WomanOutlined className="text-pink-500 mr-1"/> Perempuan</label>
-                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_female} onChange={val => setData('total_female', val)} status={errors.total_female ? 'error' : ''} />
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_female} onChange={val => setData('total_female', val || 0)} status={errors.total_female ? 'error' : ''} />
                                     </div>
                                     
                                     {/* Smart Validation Indicator */}
@@ -148,30 +148,30 @@ export default function Edit({ statistic }) {
 
                                 <div className="mb-5">
                                     <label className="block text-sm font-semibold text-gray-700 mb-2">Total Kepala Keluarga (KK)</label>
-                                    <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_family_cards} onChange={val => setData('total_family_cards', val)} status={errors.total_family_cards ? 'error' : ''} />
+                                    <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_family_cards} onChange={val => setData('total_family_cards', val || 0)} status={errors.total_family_cards ? 'error' : ''} />
                                     {errors.total_family_cards && <p className="text-red-500 text-xs mt-1">{errors.total_family_cards}</p>}
                                 </div>
 
                                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-600 mb-1">Pra Sejahtera</label>
-                                        <InputNumber min={0} className="w-full rounded-lg" value={data.pre_prosperous} onChange={val => setData('pre_prosperous', val)} />
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.pre_prosperous} onChange={val => setData('pre_prosperous', val || 0)} />
                                     </div>
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-600 mb-1">KS 1</label>
-                                        <InputNumber min={0} className="w-full rounded-lg" value={data.ks_1} onChange={val => setData('ks_1', val)} />
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.ks_1} onChange={val => setData('ks_1', val || 0)} />
                                     </div>
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-600 mb-1">KS 2</label>
-                                        <InputNumber min={0} className="w-full rounded-lg" value={data.ks_2} onChange={val => setData('ks_2', val)} />
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.ks_2} onChange={val => setData('ks_2', val || 0)} />
                                     </div>
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-600 mb-1">KS 3</label>
-                                        <InputNumber min={0} className="w-full rounded-lg" value={data.ks_3} onChange={val => setData('ks_3', val)} />
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.ks_3} onChange={val => setData('ks_3', val || 0)} />
                                     </div>
                                     <div>
                                         <label className="block text-xs font-semibold text-gray-600 mb-1">KS 3+</label>
-                                        <InputNumber min={0} className="w-full rounded-lg" value={data.ks_3_plus} onChange={val => setData('ks_3_plus', val)} />
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.ks_3_plus} onChange={val => setData('ks_3_plus', val || 0)} />
                                     </div>
                                 </div>
                                 
@@ -192,11 +192,11 @@ export default function Edit({ statistic }) {
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
                                         <label className="flex items-center text-sm font-semibold text-gray-700 mb-2"><HomeOutlined className="mr-1 text-gray-400"/> Total Dusun</label>
-                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_hamlets} onChange={val => setData('total_hamlets', val)} status={errors.total_hamlets ? 'error' : ''} />
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_hamlets} onChange={val => setData('total_hamlets', val || 0)} status={errors.total_hamlets ? 'error' : ''} />
                                     </div>
                                     <div>
                                         <label className="flex items-center text-sm font-semibold text-gray-700 mb-2"><HomeOutlined className="mr-1 text-gray-400"/> Total RT</label>
-                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_rt} onChange={val => setData('total_rt', val)} status={errors.total_rt ? 'error' : ''} />
+                                        <InputNumber min={0} size="large" className="w-full rounded-xl" value={data.total_rt} onChange={val => setData('total_rt', val || 0)} status={errors.total_rt ? 'error' : ''} />
                                     </div>
                                 </div>
                             </div>
@@ -225,7 +225,7 @@ export default function Edit({ statistic }) {
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                         <div>
                             <h3 className="text-red-700 font-bold text-lg mb-1">Danger Zone</h3>
-                            <p className="text-red-500 text-sm">Menghapus data statistik tahun {data.statistic_year} secara permanen dari sistem.</p>
+                            <p className="text-red-500 text-sm">Menghapus data statistik tahun {data.statistic_year || 'ini'} secara permanen dari sistem.</p>
                         </div>
                         <Popconfirm
                             title={`Hapus Statistik ${data.statistic_year}?`}
