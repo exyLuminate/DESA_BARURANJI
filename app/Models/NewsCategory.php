@@ -12,25 +12,24 @@ use Spatie\Activitylog\LogOptions;
 
 class NewsCategory extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $fillable = [
         'name',
         'slug'
     ];
+    
+    protected $guarded = ['id'];
 
-    /**
-     * Konfigurasi Spatie Activity Log
-     */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
             ->logFillable()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "Kategori berita telah di-{$eventName}");
+            ->setDescriptionForEvent(fn(string $eventName) => "Kategori berita telah di-{$eventName}")
+            ->useLogName('Kategori Berita'); 
     }
-    protected $guarded = ['id'];
 
     public function news(): HasMany
     {

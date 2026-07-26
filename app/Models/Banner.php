@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Traits\LogsActivity; // Tambahkan ini
+use Spatie\Activitylog\LogOptions; // Tambahkan ini
 
 class Banner extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity; // Tambahkan LogsActivity di sini
 
     protected $fillable = [
         'title',
@@ -28,6 +30,17 @@ class Banner extends Model
         'is_active' => 'boolean',
         'sort_order' => 'integer',
     ];
+
+    // Tambahkan blok fungsi ini untuk Activity Log
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs()
+            ->setDescriptionForEvent(fn(string $eventName) => "Banner telah di-{$eventName}")
+            ->useLogName('Banner');
+    }
 
     // Audit Relations
     public function creator(): BelongsTo

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Relations\BelongsTo; // Tambahkan ini
 
 class Setting extends Model
 {
@@ -18,27 +19,22 @@ class Setting extends Model
         'updated_by'
     ];
 
-    /**
-     * Konfigurasi Spatie Activity Log
-     */
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logFillable() // Mencatat perubahan pada kolom fillable
-            ->logOnlyDirty() // Hanya mencatat kolom yang berubah
+            ->logFillable()
+            ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->useLogName('Settings'); // Nama modul
+            ->setDescriptionForEvent(fn(string $eventName) => "Pengaturan telah di-{$eventName}")
+            ->useLogName('Sistem Pengaturan'); 
     }
 
-    /**
-     * Relasi Audit Sesuai SOT 7.4
-     */
-    public function creator()
+    public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function updater()
+    public function updater(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
     }

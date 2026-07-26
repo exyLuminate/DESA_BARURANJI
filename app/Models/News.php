@@ -37,7 +37,8 @@ class News extends Model
             ->logFillable()
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "Berita telah di-{$eventName}");
+            ->setDescriptionForEvent(fn(string $eventName) => "Berita telah di-{$eventName}")
+            ->useLogName('Berita'); 
     }
 
     public function category(): BelongsTo
