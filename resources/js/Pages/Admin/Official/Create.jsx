@@ -45,17 +45,18 @@ export default function Create() {
         <AdminLayout>
             <Head title="Tambah Perangkat Desa" />
             
-            <div className="max-w-7xl mx-auto pb-10">
+            {/* Penambahan px-4 sm:px-6 lg:px-8 dan pt-4 sm:pt-0 agar tidak nempel layar HP */}
+            <div className="max-w-7xl mx-auto pb-10 px-4 sm:px-6 lg:px-8 pt-4 sm:pt-0">
                 {/* Header Soft UI */}
                 <div className="mb-6 flex items-center justify-between">
                     <div>
                         <Link 
                             href={route('admin.officials.index')}
-                            className="inline-flex items-center text-gray-500 hover:text-blue-600 font-medium transition-colors mb-2"
+                            className="inline-flex items-center text-gray-500 hover:text-blue-600 font-medium transition-colors mb-2 text-sm sm:text-base"
                         >
                             <ArrowLeftOutlined className="mr-2" /> Kembali ke Daftar Perangkat
                         </Link>
-                        <h1 className="text-2xl font-bold text-gray-800">Tambah Perangkat Desa</h1>
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Tambah Perangkat Desa</h1>
                     </div>
                 </div>
 
@@ -66,13 +67,14 @@ export default function Create() {
                         <form onSubmit={submit} className="space-y-6">
                             
                             {/* SECTION 1: Profil & Identitas */}
-                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8">
-                                <h2 className="text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-6">
+                            {/* Penyesuaian padding p-5 sm:p-8 untuk mobile */}
+                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-5 sm:p-8">
+                                <h2 className="text-base sm:text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-6">
                                     <span className="bg-blue-100 text-blue-600 w-8 h-8 flex items-center justify-center rounded-xl mr-3 text-sm"><UserOutlined /></span> 
                                     Profil & Identitas
                                 </h2>
 
-                                <div className="flex flex-col sm:flex-row gap-8 mb-6">
+                                <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 mb-6">
                                     {/* Circular Avatar Uploader */}
                                     <div className="shrink-0 flex flex-col items-center">
                                         <Upload
@@ -87,12 +89,12 @@ export default function Create() {
                                                 <img 
                                                     src={photoPreview} 
                                                     alt="Avatar" 
-                                                    className="w-[120px] h-[120px] rounded-full object-cover border-4 border-gray-50 shadow-sm"
+                                                    className="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] rounded-full object-cover border-4 border-gray-50 shadow-sm"
                                                 />
                                             ) : (
-                                                <div className="w-[120px] h-[120px] rounded-full bg-gray-50 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 hover:text-blue-500 hover:border-blue-400 transition-colors">
-                                                    <CameraOutlined className="text-2xl mb-1" />
-                                                    <div className="text-xs font-medium">Unggah Pas Foto</div>
+                                                <div className="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] rounded-full bg-gray-50 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 hover:text-blue-500 hover:border-blue-400 transition-colors">
+                                                    <CameraOutlined className="text-xl sm:text-2xl mb-1" />
+                                                    <div className="text-[10px] sm:text-xs font-medium text-center px-2">Unggah Pas Foto</div>
                                                 </div>
                                             )}
                                         </Upload>
@@ -101,7 +103,7 @@ export default function Create() {
                                     </div>
 
                                     {/* Input Nama & Jabatan */}
-                                    <div className="flex-1 space-y-5">
+                                    <div className="flex-1 space-y-5 w-full">
                                         <div>
                                             <label className="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap & Gelar <span className="text-red-500">*</span></label>
                                             <Input 
@@ -133,8 +135,9 @@ export default function Create() {
                             </div>
 
                             {/* SECTION 2: Pengaturan & Masa Jabatan */}
-                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8">
-                                <h2 className="text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-6">
+                            {/* Penyesuaian padding p-5 sm:p-8 untuk mobile */}
+                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-5 sm:p-8">
+                                <h2 className="text-base sm:text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-6">
                                     <span className="bg-purple-100 text-purple-600 w-8 h-8 flex items-center justify-center rounded-xl mr-3 text-sm"><SafetyCertificateOutlined /></span> 
                                     Masa Jabatan & Pengaturan
                                 </h2>
@@ -219,7 +222,8 @@ export default function Create() {
                                     size="large"
                                     loading={processing}
                                     icon={<SaveOutlined />}
-                                    className="bg-gray-900 hover:bg-gray-800 rounded-xl px-8 shadow-md"
+                                    /* Ditambahkan w-full sm:w-auto agar full width di HP */
+                                    className="bg-gray-900 hover:bg-gray-800 rounded-xl px-8 shadow-md w-full sm:w-auto"
                                 >
                                     Simpan Perangkat Desa
                                 </Button>
@@ -229,7 +233,7 @@ export default function Create() {
 
                     {/* KOLOM KANAN: Live Preview (Lebar 1/3) */}
                     <div className="lg:col-span-1">
-                        <div className="sticky top-6">
+                        <div className="sticky top-6 mt-8 lg:mt-0">
                             <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center">
                                 <span className="w-2 h-2 rounded-full bg-green-500 mr-2 animate-pulse"></span> Live ID Preview
                             </h3>
@@ -257,7 +261,7 @@ export default function Create() {
                                     </div>
                                     
                                     {/* Judul & Teks */}
-                                    <h4 className="text-xl font-bold text-gray-800 mb-1 leading-tight">
+                                    <h4 className="text-xl font-bold text-gray-800 mb-1 leading-tight break-words w-full">
                                         {data.name || 'Nama Lengkap'}
                                     </h4>
                                     

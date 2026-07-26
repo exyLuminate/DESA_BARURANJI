@@ -56,17 +56,18 @@ export default function Edit({ official }) {
         <AdminLayout>
             <Head title={`Edit Profil - ${data.name}`} />
             
-            <div className="max-w-7xl mx-auto pb-10">
+            {/* Penambahan px-4 sm:px-6 lg:px-8 dan pt-4 sm:pt-0 agar ramah seluler */}
+            <div className="max-w-7xl mx-auto pb-10 px-4 sm:px-6 lg:px-8 pt-4 sm:pt-0">
                 {/* Header Soft UI */}
                 <div className="mb-6 flex items-center justify-between">
                     <div>
                         <Link 
                             href={route('admin.officials.index')}
-                            className="inline-flex items-center text-gray-500 hover:text-blue-600 font-medium transition-colors mb-2"
+                            className="inline-flex items-center text-gray-500 hover:text-blue-600 font-medium transition-colors mb-2 text-sm sm:text-base"
                         >
                             <ArrowLeftOutlined className="mr-2" /> Kembali ke Daftar Perangkat
                         </Link>
-                        <h1 className="text-2xl font-bold text-gray-800">Edit Perangkat Desa</h1>
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Edit Perangkat Desa</h1>
                     </div>
                 </div>
 
@@ -77,13 +78,14 @@ export default function Edit({ official }) {
                         <form onSubmit={submit} className="space-y-6">
                             
                             {/* SECTION 1: Profil & Identitas */}
-                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8">
-                                <h2 className="text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-6">
+                            {/* Penyesuaian padding p-5 sm:p-8 untuk mobile */}
+                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-5 sm:p-8">
+                                <h2 className="text-base sm:text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-6">
                                     <span className="bg-blue-100 text-blue-600 w-8 h-8 flex items-center justify-center rounded-xl mr-3 text-sm"><UserOutlined /></span> 
                                     Profil & Identitas
                                 </h2>
 
-                                <div className="flex flex-col sm:flex-row gap-8 mb-6">
+                                <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 mb-6">
                                     {/* Circular Avatar Uploader */}
                                     <div className="shrink-0 flex flex-col items-center">
                                         <Upload
@@ -98,23 +100,23 @@ export default function Edit({ official }) {
                                                 <img 
                                                     src={photoPreview} 
                                                     alt="Avatar" 
-                                                    className={`w-[120px] h-[120px] rounded-full object-cover border-4 shadow-sm transition-all duration-300 ${isPhotoChanged ? 'border-blue-200' : 'border-gray-50'}`}
+                                                    className={`w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] rounded-full object-cover border-4 shadow-sm transition-all duration-300 ${isPhotoChanged ? 'border-blue-200' : 'border-gray-50'}`}
                                                 />
                                             ) : (
-                                                <div className="w-[120px] h-[120px] rounded-full bg-gray-50 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 hover:text-blue-500 hover:border-blue-400 transition-colors">
-                                                    <CameraOutlined className="text-2xl mb-1" />
-                                                    <div className="text-xs font-medium">Unggah Pas Foto</div>
+                                                <div className="w-[100px] h-[100px] sm:w-[120px] sm:h-[120px] rounded-full bg-gray-50 border-2 border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400 hover:text-blue-500 hover:border-blue-400 transition-colors">
+                                                    <CameraOutlined className="text-xl sm:text-2xl mb-1" />
+                                                    <div className="text-[10px] sm:text-xs font-medium px-2 text-center">Unggah Pas Foto</div>
                                                 </div>
                                             )}
                                         </Upload>
-                                        <span className="text-[10px] text-gray-400 mt-2">
+                                        <span className="text-[10px] sm:text-xs text-gray-400 mt-2">
                                             {isPhotoChanged ? 'Foto baru siap diunggah' : 'Klik foto untuk mengganti'}
                                         </span>
                                         {errors.photo && <p className="text-red-500 text-xs mt-1">{errors.photo}</p>}
                                     </div>
 
                                     {/* Input Nama & Jabatan */}
-                                    <div className="flex-1 space-y-5">
+                                    <div className="flex-1 space-y-5 w-full">
                                         <div>
                                             <label className="block text-sm font-semibold text-gray-700 mb-2">Nama Lengkap & Gelar <span className="text-red-500">*</span></label>
                                             <Input 
@@ -144,8 +146,8 @@ export default function Edit({ official }) {
                             </div>
 
                             {/* SECTION 2: Pengaturan & Masa Jabatan */}
-                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-8">
-                                <h2 className="text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-6">
+                            <div className="bg-white rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100 p-5 sm:p-8">
+                                <h2 className="text-base sm:text-lg font-bold text-gray-800 flex items-center border-b pb-4 mb-6">
                                     <span className="bg-purple-100 text-purple-600 w-8 h-8 flex items-center justify-center rounded-xl mr-3 text-sm"><SafetyCertificateOutlined /></span> 
                                     Masa Jabatan & Pengaturan
                                 </h2>
@@ -229,7 +231,8 @@ export default function Edit({ official }) {
                                     size="large"
                                     loading={processing}
                                     icon={<SaveOutlined />}
-                                    className="bg-gray-900 hover:bg-gray-800 rounded-xl px-8 shadow-md"
+                                    /* Ditambahkan w-full sm:w-auto agar full width di HP */
+                                    className="bg-gray-900 hover:bg-gray-800 rounded-xl px-8 shadow-md w-full sm:w-auto"
                                 >
                                     Update Perangkat Desa
                                 </Button>
@@ -237,24 +240,27 @@ export default function Edit({ official }) {
                         </form>
 
                         {/* Danger Zone (Hapus Langsung) */}
-                        <div className="mt-8 bg-red-50/50 border border-red-100 rounded-3xl p-8">
-                            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                                <div>
+                        <div className="mt-8 bg-red-50/50 border border-red-100 rounded-3xl p-5 sm:p-8">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                <div className="w-full">
                                     <h3 className="text-red-700 font-bold text-lg mb-1">Danger Zone</h3>
                                     <p className="text-red-500 text-sm">Menghapus perangkat desa akan menghilangkan profilnya dari struktur organisasi publik.</p>
                                 </div>
-                                <Popconfirm
-                                    title="Hapus Perangkat Desa?"
-                                    description="Tindakan ini akan memindahkan data ke *trash* (Soft Delete)."
-                                    onConfirm={handleDelete}
-                                    okText="Ya, Hapus"
-                                    cancelText="Batal"
-                                    okButtonProps={{ danger: true }}
-                                >
-                                    <Button danger type="primary" icon={<DeleteOutlined />} size="large" className="rounded-xl shadow-sm shadow-red-200 shrink-0">
-                                        Hapus Profil
-                                    </Button>
-                                </Popconfirm>
+                                {/* Bungkus dalam div agar di HP bisa full-width secara rapi */}
+                                <div className="w-full sm:w-auto shrink-0">
+                                    <Popconfirm
+                                        title="Hapus Perangkat Desa?"
+                                        description="Tindakan ini akan memindahkan data ke *trash* (Soft Delete)."
+                                        onConfirm={handleDelete}
+                                        okText="Ya, Hapus"
+                                        cancelText="Batal"
+                                        okButtonProps={{ danger: true }}
+                                    >
+                                        <Button danger type="primary" icon={<DeleteOutlined />} size="large" className="rounded-xl shadow-sm shadow-red-200 w-full sm:w-auto">
+                                            Hapus Profil
+                                        </Button>
+                                    </Popconfirm>
+                                </div>
                             </div>
                         </div>
 
@@ -262,9 +268,10 @@ export default function Edit({ official }) {
 
                     {/* KOLOM KANAN: Live Preview (Lebar 1/3) */}
                     <div className="lg:col-span-1">
-                        <div className="sticky top-6">
+                        {/* Menambahkan mt-8 lg:mt-0 agar ada jarak di HP jika layout turun ke bawah */}
+                        <div className="sticky top-6 mt-8 lg:mt-0">
                             <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 flex items-center">
-                                <span className="w-2 h-2 rounded-full bg-blue-500 mr-2"></span> ID Card Preview
+                                <span className="w-2 h-2 rounded-full bg-blue-500 mr-2 animate-pulse"></span> ID Card Preview
                             </h3>
                             
                             {/* ID Card Mockup */}
@@ -289,8 +296,8 @@ export default function Edit({ official }) {
                                         )}
                                     </div>
                                     
-                                    {/* Judul & Teks */}
-                                    <h4 className="text-xl font-bold text-gray-800 mb-1 leading-tight">
+                                    {/* Judul & Teks (break-words ditambahkan agar teks tidak meluap jika nama terlalu panjang) */}
+                                    <h4 className="text-xl font-bold text-gray-800 mb-1 leading-tight break-words w-full">
                                         {data.name || 'Nama Lengkap'}
                                     </h4>
                                     
