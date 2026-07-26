@@ -5,8 +5,8 @@ import {
     AppstoreOutlined, PictureOutlined, BankOutlined, 
     BarChartOutlined, TeamOutlined, EnvironmentOutlined, 
     StarOutlined, BuildOutlined, ReadOutlined, 
-    CameraOutlined, MessageOutlined, SettingOutlined, 
-    HistoryOutlined, CloseOutlined 
+    CameraOutlined, MessageOutlined, HistoryOutlined, 
+    SettingOutlined, CloseOutlined 
 } from '@ant-design/icons';
 
 export default function Sidebar({ isOpen, onClose }) {
@@ -24,7 +24,6 @@ export default function Sidebar({ isOpen, onClose }) {
         { label: 'Berita', icon: <ReadOutlined />, href: route('admin.news.index'), path: '/admin/news', aliases: ['/admin/news-categories'] },
         { label: 'Galeri', icon: <CameraOutlined />, href: route('admin.galleries.index'), path: '/admin/galleries', aliases: ['/admin/gallery-categories'] },
         { label: 'Feedback', icon: <MessageOutlined />, href: route('admin.complaints.index'), path: '/admin/complaints', aliases: [] },
-        { label: 'Settings', icon: <SettingOutlined />, href: route('admin.settings'), path: '/admin/settings' },
         { label: 'Activity Log', icon: <HistoryOutlined />, href: route('admin.activity-logs.index'), path: '/admin/activity-logs' },
     ];
 
@@ -37,9 +36,9 @@ export default function Sidebar({ isOpen, onClose }) {
                 />
             )}
 
-            {/* FIX: Mengubah lg:static menjadi lg:sticky lg:top-0 agar menempel */}
-            <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-100 shadow-2xl lg:shadow-none lg:sticky lg:top-0 lg:block transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} flex flex-col h-screen overflow-hidden`}>
+            <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-100 shadow-2xl lg:shadow-none lg:relative transform transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} flex flex-col h-full overflow-hidden`}>
                 
+                {/* Header Logo */}
                 <div className="flex items-center justify-between h-16 px-6 border-b border-gray-100 shrink-0 bg-white">
                     <div className="text-xl font-black text-gray-800 tracking-tight">
                         <span className="text-blue-600">CMS</span> Baru Ranji 
@@ -52,7 +51,9 @@ export default function Sidebar({ isOpen, onClose }) {
                     />
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-4 space-y-1 bg-white">
+                {/* FIX: Mengganti space-y-1 menjadi gap-1 pada container flex ini agar mt-auto bekerja sempurna tanpa margin ganda */}
+                <div className="flex-1 overflow-y-auto flex flex-col p-4 gap-1 bg-white custom-scrollbar">
+                    
                     {menus.map((menu) => {
                         const isActive = url.startsWith(menu.path) || (menu.aliases && menu.aliases.some(alias => url.startsWith(alias)));
                         
@@ -74,8 +75,24 @@ export default function Sidebar({ isOpen, onClose }) {
                             </Link>
                         );
                     })}
+
+                    {/* Pengaturan Sistem - Digabung langsung dengan list, garis pemisah dihapus, didorong pakai mt-auto */}
+                    <Link
+                        href={route('admin.settings')}
+                        onClick={() => { if(window.innerWidth < 1024) onClose(); }} 
+                        className={`mt-auto flex items-center gap-3 rounded-xl px-4 py-3 transition-all font-medium text-sm border ${
+                            url.startsWith('/admin/settings') 
+                                ? 'bg-blue-50 text-blue-700 shadow-sm border-blue-100' 
+                                : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-transparent'
+                        }`}
+                    >
+                        <span className={`text-lg transition-colors ${url.startsWith('/admin/settings') ? 'text-blue-600' : 'text-gray-400'}`}>
+                            <SettingOutlined />
+                        </span>
+                        Pengaturan Sistem
+                    </Link>
+
                 </div>
-                
             </aside>
         </>
     );
